@@ -25,8 +25,8 @@ indoors in the panelboard.
         │  Antenna    │
         │  915 MHz    │
         └──────┬──────┘
-               │ N-type
-               │ LMR-400 SMA↔N (3 ft)    ⏚ ground rod
+               │ SMA
+               │                         ⏚ ground rod
                │                         │
    ┌───────────┴──────────────────┐      │ #10 AWG
    │ OUTDOOR ENCLOSURE  1555WA2GY │──────┘  via ILSCO GBL-4DBT clamp
@@ -34,14 +34,14 @@ indoors in the panelboard.
    │                              │
    │   ⊙ SMA-female bulkhead      │
    │   │                          │
-   │   │ RG-316 MMCX↔SMA pigtail  │
+   │   │ 100MMCXSMAFBH3 · 3"      │
    │   │                          │
    │  ┌┴──────────────────┐       │
    │  │ RigExpert 915MPA  │       │      RF stays entirely outdoors.
    │  │ 30 dBm PA + LNA   │       │      Nothing RF crosses the wall.
    │  │ 5 VDC · MMCX ports│       │
    │  └┬──────────────────┘       │
-   │   │ IPEX↔MMCX pigtail        │
+   │   │ UFLMMCX10 · 10"          │
    │  ┌┴──────────────────────┐   │
    │  │ RAK19001 base board   │   │
    │  │  ┌─────────┐ ┌──────┐ │   │
@@ -98,10 +98,11 @@ All RF is contained inside the outdoor enclosure and its external antenna. No RF
 connector crosses the building wall.
 
 ```
- RAK4631          915MPA (MMCX)                    SMA-female       LMR-400        8 dBi
-  IPEX ──IPEX↔MMCX──► radio ═══ PA + LNA ═══ ant ──MMCX↔SMA─► bulkhead ══════►  antenna
-         pigtail      port      +15 dB TX      port  (RG-316)  (encl. wall)   SMA↔N    915 MHz
-                                                                              (3 ft, N-type)
+ RAK4631            915MPA (MMCX)                      SMA-female        8 dBi
+  u.FL ──UFLMMCX10──► radio ═══ PA + LNA ═══ ant ──100MMCXSMAFBH3─► bulkhead ──SMA──►  antenna
+         (10")        port      +15 dB TX      port     (RG316, 3")    (encl. wall)     915 MHz
+
+  Amp bypass:  RAK4631 u.FL ──UFLSMA6 (6")──► SMA-female bulkhead ──► antenna    (no amplifier)
 ```
 
 **Link budget (TX):**
@@ -193,12 +194,13 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
 | Ethernet Module | RAK13800 | 10/100 Mbps RJ45 interface | 1 |
 | PoE Power Module | RAK9168 | IEEE 802.3af PoE extraction | 1 |
 | Outdoor Enclosure | 1555WA2GY | IP67 waterproof housing + mounting plate | 1 |
-| Internal RF Pigtail | RG-316 MMCX-male to SMA-female bulkhead | Bridges booster (MMCX) to enclosure-wall SMA bulkhead | 1 |
-| Exterior Low-Loss Coax | LMR-400 (3 ft), SMA to N-type | Double-shielded low-loss cable; SMA at bulkhead, N-type at antenna | 1 |
+| RAK4631 → 915MPA cable | UFLMMCX10 | u.FL/IPEX (MHF1) plug → MMCX male, R/A, 10″ | 1 |
+| 915MPA antenna → SMA cable | 100MMCXSMAFBH3 | MMCX male, R/A → SMA-female bulkhead w/ O-ring, RG316, 3″ | 1 |
+| RAK4631 → antenna (amp bypass) | UFLSMA6 | u.FL/IPEX (MHF1) plug → SMA-female bulkhead w/ O-ring, 6″ | 1 |
 | Indoor PoE Injector | UACC-POE+-2.5G | 30 W adapter, indoors in panelboard | 1 |
 | High-Gain Antenna | 8 dBi Fiberglass (915 MHz) | Omni-directional | 1 |
 | Ethernet Surge Protector | Ubiquiti ETH-SP-G2 | Gigabit, PoE pass-through, at building entry | 1 |
-| Weatherproofing Tape | 3M 2228 Rubber Mastic | Over the SMA bulkhead and N-type antenna junctions, then LMR-400 jacket | 1 |
+| Weatherproofing Tape | 3M 2228 Rubber Mastic | Over the SMA bulkhead and antenna connector junctions | 1 |
 | Cable Entry Gland | PG11 Nylon Gland | Clamps 5–10 mm; CAT5E OD ~5.5–6.2 mm | 1 |
 | Ground Wire | #10 AWG | By the foot | 1 |
 | GEC Clamp | ILSCO GBL-4DBT | Irreversible clamp to ground rod / GEC | 1 |
@@ -212,8 +214,7 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
 - **Indoor entry:** ETH-SP-G2 at the point where CAT5E enters the building,
   ground lug to building ground.
 - **Weatherproofing:** 3M 2228 mastic tape over each outdoor connector junction —
-  the SMA bulkhead on the enclosure wall and the N-type antenna connector — then
-  over the LMR-400 jacket.
+  the SMA bulkhead on the enclosure wall and the antenna connector.
 
 ---
 
