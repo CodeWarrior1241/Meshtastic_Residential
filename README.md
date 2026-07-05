@@ -28,36 +28,33 @@ indoors in the panelboard.
                │ SMA
                │                         ⏚ ground rod
                │                         │
-   ┌───────────┴──────────────────┐      │ #10 AWG
-   │ OUTDOOR ENCLOSURE  1555WA2GY │──────┘  via ILSCO GBL-4DBT clamp
-   │ (IP67, holds all electronics)│
-   │                              │
-   │   ⊙ SMA-female bulkhead      │
-   │   │                          │
-   │   │ 100MMCXSMAFBH3 · 3"      │
-   │   │                          │
-   │  ┌┴──────────────────┐       │
-   │  │ RigExpert 915MPA  │       │      RF stays entirely outdoors.
-   │  │ 30 dBm PA + LNA   │       │      Nothing RF crosses the wall.
-   │  │ 5 VDC · MMCX ports│       │
-   │  └┬──────────────────┘       │
-   │   │ UFLMMCX10 · 10"          │
-   │  ┌┴──────────────────────┐   │
-   │  │ RAK19001 base board   │   │
-   │  │  ┌─────────┐ ┌──────┐ │   │
-   │  │  │ RAK4631 │ │RAK   │ │   │
-   │  │  │ US915   │ │13800 │ │   │
-   │  │  │ MCU/LoRa│ │ Eth  │ │   │
-   │  │  └─────────┘ └──┬───┘ │   │
-   │  │  ┌───────────┐  │     │   │
-   │  │  │ RAK9168   │  │     │   │
-   │  │  │ PoE (5V)  │  │     │   │
-   │  │  └─────┬─────┘  │     │   │
-   │  └────────┼────────┼─────┘   │
-   │      5V   │  RJ45  │         │
-   │   power ◄─┘        │ data    │
-   │           (both from CAT5E)  │
-   └───────────────────┬──────────┘
+   ┌───────────┴────────────────────┐    │ #10 AWG
+   │ OUTDOOR ENCLOSURE  1555WA2GY   │────┘  via ILSCO GBL-4DBT clamp
+   │ (IP67, holds all electronics)  │
+   │                                │
+   │           ⊙ SMA-female bulkhead│
+   │           │                    │
+   │           │ 100MMCXSMAFBH3 · 3"│
+   │           ▼                    │
+   │  ┌────────┬─────────┐          │
+   │  │ RigExpert 915MPA │          │
+   │  │ 30 dBm PA + LNA  │          │
+   │  │ 5 VDC power in   │◄─────┐   │
+   │  └────────┬─────────┘      │   │
+   │           │ UFLMMCX10·10"  │   │
+   │  ┌────────┴─────────┐      │   │
+   │  │ RAK19001 board   │◄─────┤   │
+   │  │ RAK4631·RAK13800 │  5V  │   │
+   │  └────────┬─────────┘      │   │
+   │           │ data          │   │
+   │           │  ┌─────────────┤   │
+   │           │  │ RAK9168     │   │
+   │           │  │ PoE ► 5 V   │   │
+   │           │  └────┬────────┘   │
+   │           │  PoE  │            │
+   │           └───────┤            │
+   │                   │ CAT5E      │
+   └───────────────────┬────────────┘
                        │ CAT5E (data + PoE)
                  ┌─────┴─────┐
                  │ PG11 gland│  cable entry, enclosure wall
