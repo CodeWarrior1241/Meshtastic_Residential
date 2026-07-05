@@ -25,16 +25,16 @@ indoors in the panelboard.
         │  Antenna    │
         │  915 MHz    │
         └──────┬──────┘
-               │ N-male
-               │ LMR-400 (3 ft)          ⏚ ground rod
+               │ N-type
+               │ LMR-400 SMA↔N (3 ft)    ⏚ ground rod
                │                         │
    ┌───────────┴──────────────────┐      │ #10 AWG
    │ OUTDOOR ENCLOSURE  1555WA2GY │──────┘  via ILSCO GBL-4DBT clamp
    │ (IP67, holds all electronics)│
    │                              │
-   │   ⊙ N-female bulkhead        │
+   │   ⊙ SMA-female bulkhead      │
    │   │                          │
-   │   │ RG-316 MMCX↔N pigtail    │
+   │   │ RG-316 MMCX↔SMA pigtail  │
    │   │                          │
    │  ┌┴──────────────────┐       │
    │  │ RigExpert 915MPA  │       │      RF stays entirely outdoors.
@@ -98,27 +98,34 @@ All RF is contained inside the outdoor enclosure and its external antenna. No RF
 connector crosses the building wall.
 
 ```
- RAK4631          915MPA (MMCX)                    N-female         LMR-400        8 dBi
-  IPEX ──IPEX↔MMCX──► radio ═══ PA + LNA ═══ ant ──MMCX↔N──► bulkhead ══════►  antenna
-         pigtail      port      +15 dB TX      port  (RG-316)  (encl. wall)    (3 ft)   915 MHz
+ RAK4631          915MPA (MMCX)                    SMA-female       LMR-400        8 dBi
+  IPEX ──IPEX↔MMCX──► radio ═══ PA + LNA ═══ ant ──MMCX↔SMA─► bulkhead ══════►  antenna
+         pigtail      port      +15 dB TX      port  (RG-316)  (encl. wall)   SMA↔N    915 MHz
+                                                                              (3 ft, N-type)
 ```
 
 **Link budget (TX):**
 
 ```
-   RAK4631 output     +15 dBm   (firmware-limited)
+   RAK4631 output     +13 dBm   (firmware-set for EIRP compliance)
    915MPA gain        +15 dB
    ───────────────────────────
-   Conducted power    +30 dBm   (1 W)
+   Conducted power    +28 dBm
    Antenna gain       + 8 dBi
    ───────────────────────────
-   EIRP               +38 dBm
+   EIRP               +36 dBm   (at FCC 15.247 ceiling)
 ```
 
-> **TX power trim.** If the EIRP runs hot, the **RAK4631** LoRa transmitter — the
-> only TX source in the chain, set in Meshtastic firmware — is tuned **down 2 dB**,
-> from **15 dBm to 13 dBm**. That drops conducted power to 28 dBm and EIRP to
-> 36 dBm.
+> **Why 13 dBm.** At the full **15 dBm** the RAK4631 can output, this chain
+> (+15 dB amplifier, +8 dBi antenna) would reach **+38 dBm EIRP** — 2 dB over the
+> FCC 15.247 ceiling of +36 dBm. The **RAK4631** LoRa transmitter is the only TX
+> source in the chain, so it is held at **13 dBm** in Meshtastic firmware, landing
+> the link exactly at the +36 dBm limit.
+>
+> The compliant levers are TX power *and* antenna gain. Because the 8 dBi antenna
+> and +15 dB amplifier are the as-built hardware, TX power is trimmed rather than
+> swapping the antenna. Fitting a 6 dBi antenna instead would allow the full
+> 15 dBm (30 + 6 = 36 dBm EIRP) — a hardware change, not adopted here.
 
 ---
 
@@ -186,12 +193,12 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
 | Ethernet Module | RAK13800 | 10/100 Mbps RJ45 interface | 1 |
 | PoE Power Module | RAK9168 | IEEE 802.3af PoE extraction | 1 |
 | Outdoor Enclosure | 1555WA2GY | IP67 waterproof housing + mounting plate | 1 |
-| Internal RF Pigtail | RG-316 MMCX to N-Female | Bridges booster (MMCX) to enclosure-wall bulkhead | 1 |
-| Exterior Low-Loss Coax | LMR-400 (3 ft) | Double-shielded low-loss cable | 1 |
+| Internal RF Pigtail | RG-316 MMCX-male to SMA-female bulkhead | Bridges booster (MMCX) to enclosure-wall SMA bulkhead | 1 |
+| Exterior Low-Loss Coax | LMR-400 (3 ft), SMA to N-type | Double-shielded low-loss cable; SMA at bulkhead, N-type at antenna | 1 |
 | Indoor PoE Injector | UACC-POE+-2.5G | 30 W adapter, indoors in panelboard | 1 |
 | High-Gain Antenna | 8 dBi Fiberglass (915 MHz) | Omni-directional | 1 |
 | Ethernet Surge Protector | Ubiquiti ETH-SP-G2 | Gigabit, PoE pass-through, at building entry | 1 |
-| Weatherproofing Tape | 3M 2228 Rubber Mastic | Over N-type junction, then LMR-400 jacket | 1 |
+| Weatherproofing Tape | 3M 2228 Rubber Mastic | Over the SMA bulkhead and N-type antenna junctions, then LMR-400 jacket | 1 |
 | Cable Entry Gland | PG11 Nylon Gland | Clamps 5–10 mm; CAT5E OD ~5.5–6.2 mm | 1 |
 | Ground Wire | #10 AWG | By the foot | 1 |
 | GEC Clamp | ILSCO GBL-4DBT | Irreversible clamp to ground rod / GEC | 1 |
@@ -204,8 +211,9 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
   irreversible clamp to the ground rod / GEC.
 - **Indoor entry:** ETH-SP-G2 at the point where CAT5E enters the building,
   ground lug to building ground.
-- **Weatherproofing:** 3M 2228 mastic tape over the N-type connector junction,
-  then over the LMR-400 jacket.
+- **Weatherproofing:** 3M 2228 mastic tape over each outdoor connector junction —
+  the SMA bulkhead on the enclosure wall and the N-type antenna connector — then
+  over the LMR-400 jacket.
 
 ---
 
@@ -214,7 +222,7 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
 | Setting | Value |
 |---|---|
 | Region | `US_915` |
-| TX power | `15 dBm` |
+| TX power | `13 dBm` (holds EIRP at the +36 dBm FCC ceiling — see [RF Chain](#rf-chain)) |
 | Role | `Router` |
 | Primary channel PSK | set on deployment |
 | Admin channel PSK | set on deployment, separate from primary |
