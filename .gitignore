@@ -1,0 +1,5 @@
+# Office temp/lock files
+~$*
+
+# Build/dist output
+.dist/
