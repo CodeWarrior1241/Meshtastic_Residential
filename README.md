@@ -46,7 +46,7 @@ indoors in the panelboard.
    │  │ RAK19001 board   │◄─────┤   │
    │  │ RAK4631·RAK13800 │  5V  │   │
    │  └────────┬─────────┘      │   │
-   │           │ data          │   │
+   │           │ data           │   │
    │           │  ┌─────────────┤   │
    │           │  │ RAK9168     │   │
    │           │  │ PoE ► 5 V   │   │
