@@ -115,6 +115,11 @@ connector crosses the building wall.
    EIRP               +38 dBm
 ```
 
+> **TX power trim.** If the EIRP runs hot, the **RAK4631** LoRa transmitter — the
+> only TX source in the chain, set in Meshtastic firmware — is tuned **down 2 dB**,
+> from **15 dBm to 13 dBm**. That drops conducted power to 28 dBm and EIRP to
+> 36 dBm.
+
 ---
 
 ## Power & Data — Single CAT5E Run
@@ -222,7 +227,6 @@ The node lives on an isolated IoT VLAN with no path back into the trusted LAN.
 - [ ] 🔧 **5V amp power distribution — IN PROGRESS.** Define how the 915MPA is fed
       5 V from the RAK9168 rail: splitter vs. dedicated buck, wire gauge, and bulk
       capacitance to hold up the ~1.96 A TX peak. *Actively being worked.*
-- [ ] **915MPA power connector type** — confirm 5 VDC input connector.
 
 ---
 
